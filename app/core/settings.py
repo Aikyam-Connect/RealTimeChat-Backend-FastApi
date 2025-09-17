@@ -1,0 +1,1 @@
+# App settings (env variables, JWT config)

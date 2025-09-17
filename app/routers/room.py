@@ -1,0 +1,1 @@
+# Routes for room management (create, list, etc.)

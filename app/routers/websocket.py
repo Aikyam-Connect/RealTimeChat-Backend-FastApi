@@ -1,0 +1,1 @@
+# WebSocket for real-time communication (messaging)

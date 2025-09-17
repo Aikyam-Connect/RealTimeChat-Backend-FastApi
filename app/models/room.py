@@ -1,0 +1,1 @@
+# Room model (for chat/video room)

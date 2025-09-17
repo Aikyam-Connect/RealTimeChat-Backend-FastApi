@@ -1,0 +1,1 @@
+# Room schemas (e.g., create, list rooms)
