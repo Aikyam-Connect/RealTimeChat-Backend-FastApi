@@ -1,4 +1,4 @@
-# FastAPI Backend for Machine Test
+# FastAPI Backend for Group Project
 
 ## Overview
 
