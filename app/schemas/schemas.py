@@ -38,6 +38,10 @@ class MessageResponse(MessageBase):
     id: int
     sender_id: int
     room_id: int
+    message_type: Optional[str] = "text"
+    file_url: Optional[str] = None
+    file_name: Optional[str] = None
+    file_size: Optional[int] = None
     created_at: datetime
     sender_name: Optional[str] = None
 

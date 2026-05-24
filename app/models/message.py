@@ -10,6 +10,10 @@ class Message(Base):
     content = Column(Text, nullable=False)
     sender_id = Column(Integer, ForeignKey("users.id"))
     room_id = Column(Integer, ForeignKey("rooms.id"))
+    message_type = Column(String(50), default="text")
+    file_url = Column(String(1024), nullable=True)
+    file_name = Column(String(255), nullable=True)
+    file_size = Column(Integer, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     sender = relationship("User")

@@ -1,0 +1,61 @@
+---
+description: Backend Development Rules and Standards for RealTimeChat (FastAPI)
+globs: *.py, *.env, requirements.txt
+---
+
+# RealTimeChat Backend - AI Coding Assistant Configuration
+
+## Project Overview
+This project is a real-time chat application backend built with **FastAPI**. It uses **SQLAlchemy** for ORM (Sync) and **Pydantic** for validations. The database is designed to be compatible with **PostgreSQL** and **TiDB** (MySQL).
+
+## Technology Stack
+- **Language**: Python 3.x
+- **Framework**: FastAPI
+- **ORM**: SQLAlchemy (Sync) `v2.0.25`
+- **Database Drivers**: `psycopg2-binary`, `pymysql`
+- **Authentication**: JWT (`python-jose`, `passlib`)
+- **Validation**: Pydantic v2
+- **Configuration**: Pydantic Settings (`.env`)
+
+## Project Structure
+```text
+app/
+  ├── core/         # Config, security, exceptions
+  ├── database/     # DB connection, session handling
+  ├── models/       # SQLAlchemy ORM models (inherit from Base)
+  ├── schemas/      # Pydantic models (Request/Response schemas)
+  ├── routers/      # API Endpoints (APIRouter)
+  ├── services/     # Business logic (optional layer)
+  └── main.py       # App entry point
+```
+
+## Coding Standards & Rules
+
+### 1. General Python
+- Use **Snake Case** (`date_created`) for variables, functions, and database columns.
+- Use **Pascal Case** (`UserProfile`) for classes and Pydantic models.
+- **Type Hinting**: MUST be used for all function signatures. Use standard Python types (`from typing import Optional, List` or Python 3.10+ syntax `str | None`).
+- **Docstrings**: Include basic docstrings for complex business logic.
+
+### 2. FastAPI & Routers
+- Use `APIRouter` to organize endpoints by module (e.g., `user`, `chat`, `auth`).
+- **Dependency Injection**: Use `Depends()` for database sessions (`get_db`) and current user retrieval (`get_current_user`).
+- **Status Codes**: Explicitly return status codes using `status` module (e.g., `status.HTTP_201_CREATED`) or `HTTPException`.
+
+### 3. Database (SQLAlchemy)
+- **Models**: Define models in `app/models/`. All models must inherit from `app.database.connection.Base`.
+- **Session Management**: NEVER create a global session. Always inject standard `Session` via `Depends(get_db)`.
+- **Migrations**: (If Alembic is configured) Ensure changes are reflected in migrations.
+
+### 4. Pydantic Schemas
+- Define schemas in `app/schemas/`.
+- Use `ConfigDict(from_attributes=True)` (formerly `orm_mode = True`) for response schemas interacting with ORM models.
+- Separate `Base`, `Create`, `Update`, and `Response` schemas to control field visibility.
+
+### 5. Configuration & Env
+- Access environment variables ONLY through `app.core.config.settings`.
+- Do NOT use `os.getenv()` directly in application code.
+
+### 6. Authentication
+- Protected routes must use the `get_current_user` dependency.
+- Passwords must be hashed using `passlib` (Bcrypt).
