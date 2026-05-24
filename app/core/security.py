@@ -40,3 +40,20 @@ def verify_google_token(token: str):
         # Invalid token
         print(f"Error verifying google token: {e}")
         return None
+
+import hashlib
+import os
+
+CLOUDINARY_CLOUD_NAME = os.environ.get("CLOUDINARY_CLOUD_NAME", "dh901hnb9")
+CLOUDINARY_API_KEY = os.environ.get("CLOUDINARY_API_KEY", "297566653823482")
+CLOUDINARY_API_SECRET = os.environ.get("CLOUDINARY_API_SECRET", "ofq4-6BmhjGXMj0zz1wuYSdEfmY")
+
+def generate_cloudinary_signature(params: dict) -> str:
+    # Sort parameters alphabetically
+    sorted_params = sorted(params.items())
+    # Create the query string
+    param_str = "&".join([f"{k}={v}" for k, v in sorted_params])
+    # Append the API Secret
+    sign_str = param_str + CLOUDINARY_API_SECRET
+    # Return SHA-1 digest in hex format
+    return hashlib.sha1(sign_str.encode('utf-8')).hexdigest()

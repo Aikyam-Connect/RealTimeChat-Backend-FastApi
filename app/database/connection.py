@@ -16,7 +16,7 @@ if "mysql" in DATABASE_URL:
 # We added ?ssl_verify_cert=true in the URL construction for pymysql which might handle it.
 # Let's keep it simple.
 
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, connect_args=connect_args)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()

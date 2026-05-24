@@ -27,6 +27,8 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     user = db.query(User).filter(User.email == email).first()
     if user is None:
         raise credentials_exception
+    if user.is_banned:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Your account has been banned.")
     return user
 
 @router.post("/login/google", response_model=schemas.Token)
@@ -43,6 +45,9 @@ def login_google(login_data: schemas.GoogleLogin, db: Session = Depends(get_db))
 
     # Check if user exists
     user = db.query(User).filter(User.email == email).first()
+    if user and user.is_banned:
+        raise HTTPException(status_code=403, detail="Your account has been banned.")
+
     if not user:
         # Create new user
         user = User(email=email, name=name, picture=picture, google_id=google_id)
